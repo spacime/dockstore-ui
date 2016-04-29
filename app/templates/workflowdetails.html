@@ -225,11 +225,12 @@
              ng-if="workflowObj">
         </div>
       </uib-tab>
-      <!--<uib-tab active="activeTabs[4]" disable="!isWorkflowFull()">-->
-        <!--<uib-tab-heading>Tools</uib-tab-heading>-->
-        <!--<div>-->
-        <!--</div>-->
-      <!--</uib-tab>-->
+      <uib-tab active="activeTabs[4]" disable="!isWorkflowFull()">
+        <uib-tab-heading>Tools</uib-tab-heading>
+        <div workflow-tools-grid
+             workflow-obj="workflowObj">
+        </div>
+      </uib-tab>
       <uib-tab active="activeTabs[5]" disable="!isWorkflowFull()">
         <uib-tab-heading>DAG</uib-tab-heading>
         <div workflow-dag-view

@@ -40,6 +40,9 @@ angular.module('dockstore.ui')
 
       $scope.nodesAndEdges = function(workflowId, workflowVersions) {
       var workflowVersionId;
+      if (workflowVersions.length == 0) {
+        return null;
+      }
       for (var i = 0; i < workflowVersions.length; i++) {
         if (workflowVersions[i].name === $scope.selVersionName) {
           if (workflowVersions[i].valid) {
@@ -65,10 +68,11 @@ angular.module('dockstore.ui')
         $scope.workflowVersions = $scope.getWorkflowVersions();
         $scope.selVersionName = $scope.workflowVersions[0];
 
-      }
+      };
 
       $scope.refreshDocument = function() {
         $scope.dagJson = $scope.nodesAndEdges($scope.workflowObj.id, $scope.workflowObj.workflowVersions);
+        if ($scope.dagJson !== null){
         cy = window.cy = cytoscape({
       	  container: document.getElementById('cy'),
 
@@ -111,6 +115,9 @@ angular.module('dockstore.ui')
             window.location.href = this.data('tool');
           }
         });
+        } else {
+          cy = window.cy = null;
+        }
       };
 
       $scope.setDocument();

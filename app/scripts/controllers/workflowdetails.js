@@ -14,7 +14,8 @@ angular.module('dockstore.ui')
     'WorkflowService',
     'FormattingService',
     'NotificationService',
-    function ($scope, $q, WorkflowService, FrmttSrvc, NtfnService) {
+    '$location',
+    function ($scope, $q, WorkflowService, FrmttSrvc, NtfnService, $location) {
 
       $scope.labelsEditMode = false;
       $scope.descriptorEnabled = false;
