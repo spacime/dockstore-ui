@@ -47,6 +47,12 @@ angular.module('dockstore.ui')
           });
       };
 
+      $scope.changeExt = function(name, extension){
+        var length = name.length;
+        var nameNoExt = name.substring(0,length-3);
+        return nameNoExt+extension;
+      };
+
       $scope.getWorkflowPath = function(workflowPath, part) {
         var path = workflowPath.split("/");
         return (part === 'organization') ? path[0] : path[1];
