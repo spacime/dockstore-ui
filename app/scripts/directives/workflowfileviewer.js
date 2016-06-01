@@ -30,6 +30,9 @@ angular.module('dockstore.ui')
           scope.setDocument();
           scope.refreshDocument();
         });
+        scope.$on('checkDescPageType', function(event) {
+          scope.checkDescriptor();
+        });
       }
     };
   });

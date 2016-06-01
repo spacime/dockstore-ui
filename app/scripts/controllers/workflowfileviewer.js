@@ -20,6 +20,50 @@ angular.module('dockstore.ui')
       $scope.fileLoaded = false;
       $scope.fileContents = null;
 
+      $scope.checkDescriptor = function() {
+        $scope.workflowVersions = $scope.getWorkflowVersions();
+
+        var accumulator = [];
+        var index = 0;
+        for (var i=0; i<$scope.workflowVersions.length; i++) {
+          for (var j=0; j<descriptors.length; j++) {
+            accumulator[index] = {ver: $scope.workflowVersions[i], desc: descriptors[j]};
+            index++;
+          };
+        };
+
+        var checkSuccess = function(acc) {
+          var makePromises = function(acc, start) {
+            var vd = acc[start];
+            function filePromise(vd){
+              return $scope.getDescriptorFile($scope.workflowObj.id, vd.ver, vd.desc).then(
+                function(s){
+                  return {success: true, index:start};
+                },
+                function(e){
+                  if (start+1 === acc.length) {
+                    return {success: false, index:start};
+                  } else {
+                    start++;
+                    return filePromise(acc[start])
+                  };
+                });
+            }
+            return filePromise(vd);
+          };
+          return makePromises(acc,0);
+        }
+
+        var success = checkSuccess(accumulator);
+        success.then(
+          function(result){
+            $scope.selVersionName = accumulator[result.index].ver;
+            $scope.selDescriptorName = accumulator[result.index].desc;
+          },
+          function(e){console.log("error",e)}
+        );
+      };
+
       $scope.getWorkflowVersions = function() {
         var sortedVersionObjs = $scope.workflowObj.workflowVersions;
         sortedVersionObjs.sort(function(a, b) {
