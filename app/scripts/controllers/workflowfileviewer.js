@@ -21,7 +21,6 @@ angular.module('dockstore.ui')
       $scope.fileContents = null;
       $scope.successContent = [];
 
-
       $scope.checkDescriptor = function() {
         $scope.workflowVersions = $scope.getWorkflowVersions();
         $scope.successContent = [];
@@ -67,7 +66,6 @@ angular.module('dockstore.ui')
           function(result){
             $scope.selVersionName = $scope.successContent[0].version;
             $scope.selDescriptorName = $scope.successContent[0].descriptor;
-            console.log($scope.successContent);
           },
           function(e){console.log("error",e)}
         );
