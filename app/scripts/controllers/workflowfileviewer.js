@@ -19,10 +19,12 @@ angular.module('dockstore.ui')
 
       $scope.fileLoaded = false;
       $scope.fileContents = null;
+      $scope.successContent = [];
+
 
       $scope.checkDescriptor = function() {
         $scope.workflowVersions = $scope.getWorkflowVersions();
-
+        $scope.successContent = [];
         var accumulator = [];
         var index = 0;
         for (var i=0; i<$scope.workflowVersions.length; i++) {
@@ -38,14 +40,20 @@ angular.module('dockstore.ui')
             function filePromise(vd){
               return $scope.getDescriptorFile($scope.workflowObj.id, vd.ver, vd.desc).then(
                 function(s){
-                  return {success: true, index:start};
+                  $scope.successContent.push({version:vd.ver,descriptor:vd.desc});
+                  if(start+1 === acc.length) {
+                    return {success: true, index:start};
+                  } else{
+                    start++;
+                    return filePromise(acc[start]);
+                  }
                 },
                 function(e){
                   if (start+1 === acc.length) {
                     return {success: false, index:start};
                   } else {
                     start++;
-                    return filePromise(acc[start])
+                    return filePromise(acc[start]);
                   };
                 });
             }
@@ -54,14 +62,39 @@ angular.module('dockstore.ui')
           return makePromises(acc,0);
         }
 
-        var success = checkSuccess(accumulator);
-        success.then(
+        var successResult = checkSuccess(accumulator);
+        successResult.then(
           function(result){
-            $scope.selVersionName = accumulator[result.index].ver;
-            $scope.selDescriptorName = accumulator[result.index].desc;
+            $scope.selVersionName = $scope.successContent[0].version;
+            $scope.selDescriptorName = $scope.successContent[0].descriptor;
+            console.log($scope.successContent);
           },
           function(e){console.log("error",e)}
         );
+      };
+
+      $scope.filterDescriptor = function(element) {
+        for(var i=0;i<$scope.successContent.length;i++){
+          if($scope.successContent[i].descriptor === element){
+            return true;
+          } else{
+            if(i===$scope.successContent.length -1){
+              return false;
+            }
+          }
+        }
+      };
+
+      $scope.filterVersion = function(element) {
+        for(var i=0;i<$scope.successContent.length;i++){
+          if($scope.successContent[i].version === element){
+            return true;
+          } else{
+            if(i===$scope.successContent.length -1){
+              return false;
+            }
+          }
+        }
       };
 
       $scope.getWorkflowVersions = function() {
