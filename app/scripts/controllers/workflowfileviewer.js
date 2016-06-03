@@ -142,8 +142,8 @@ angular.module('dockstore.ui')
         $scope.fileContents = null;
         $scope.expectedFilename = 'Descriptor';
         $scope.getDescriptorFile($scope.workflowObj.id, $scope.selVersionName, $scope.selDescriptorName);
-      };
-
+      };    
+      
       $scope.setDocument();
 
   }]);
