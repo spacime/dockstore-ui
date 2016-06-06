@@ -72,9 +72,13 @@ angular.module('dockstore.ui')
       };
 
       $scope.refreshWorkflow = function(workflowId, activeTabIndex) {
+        console.log("refreshWorkflow");
+        console.log("activeTabIndex: "+activeTabIndex);
+        console.log("activeTabs: "+$scope.activeTabs);
         $scope.setWorkflowDetailsError(null);
         if ($scope.refreshingWorkflow) return;
         $scope.refreshingWorkflow = true;
+
         return WorkflowService.refreshWorkflow(workflowId)
           .then(
             function(workflowObj) {
@@ -99,7 +103,17 @@ angular.module('dockstore.ui')
           ).finally(function(response) {
             $scope.refreshingWorkflow = false;
           });
+          
       };
+
+      $scope.checkValidation = function(){
+        //check if cwl/wdl file is valid
+        console.log($scope.workflowObj);
+        $scope.$broadcast('getFile');
+        if($scope.workflowObj.mode === 'STUB'){
+          $scope.checkValidation();
+        }
+      }
 
       $scope.setWorkflowLabels = function(workflowId, labels) {
         $scope.setWorkflowDetailsError(null);

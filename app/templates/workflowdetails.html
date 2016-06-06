@@ -74,10 +74,18 @@
         </div>
         <button type="button"
                 class="btn btn-primary"
+                ng-click="checkValidation()"
+                ng-disabled="refreshingWorkflow">
+          Refresh
+        </button>
+        <!-- 
+        <button type="button"
+                class="btn btn-primary"
                 ng-click="refreshWorkflow(workflowObj.id)"
                 ng-disabled="refreshingWorkflow">
           Refresh
         </button>
+        -->
       </div>
     </h3>
   </div>

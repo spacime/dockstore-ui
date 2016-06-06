@@ -21,6 +21,49 @@ angular.module('dockstore.ui')
       $scope.fileContents = null;
       $scope.successContent = [];
 
+      $scope.getFile = function() {
+        console.log("in getFile");
+        $scope.checkDescriptor();
+        // console.log($scope.selVersionName);
+        // console.log($scope.selDescriptorName);
+       // var try1 = function(){
+          $scope.getDescriptorFile($scope.workflowObj.id, $scope.selVersionName, $scope.selDescriptorName).then(
+          function(result){
+            //should check if descriptor is wdl or cwl later on
+            //for now so it's easier, check as if it's cwl but valid or invalid
+              console.log("descriptor is cwl");
+              var inputFound = false;
+              var outputFound = false;
+              var versionFound = false;
+              var commandFound = false;
+              var classFound = false;
+              if(result.search("inputs:") !== -1){
+                inputFound = true;
+              }
+              if(result.search("outputs:") !== -1){
+                outputFound = true;
+              }
+              if(result.search("cwlVersion:") !== -1){
+                versionFound = true;
+              }
+              if(result.search("baseCommand:") !== -1){
+                commandFound = true;
+              }
+              if(result.search("class:") !== -1){
+                classFound = true;
+              }
+              if(inputFound && outputFound && classFound){
+                console.log("found all");
+                $scope.$emit('refreshWorkflows');
+              } 
+              else{
+                $scope.$emit('refreshError',"TEST ERROR");
+              }
+          },
+          function(e){console.log("error",e)}
+        );
+    };
+
       $scope.checkDescriptor = function() {
         $scope.workflowVersions = $scope.getWorkflowVersions();
         $scope.successContent = [];
