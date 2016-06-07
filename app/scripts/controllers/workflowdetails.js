@@ -18,6 +18,9 @@ angular.module('dockstore.ui')
 
       $scope.labelsEditMode = false;
       $scope.descriptorEnabled = false;
+      $scope.validContent = false;
+      $scope.missingContent = [];
+      $scope.missingWarning = false;
       if (!$scope.activeTabs) {
         $scope.activeTabs = [true];
         for (var i = 0; i < 3; i++) $scope.activeTabs.push(false);
@@ -72,13 +75,9 @@ angular.module('dockstore.ui')
       };
 
       $scope.refreshWorkflow = function(workflowId, activeTabIndex) {
-        console.log("refreshWorkflow");
-        console.log("activeTabIndex: "+activeTabIndex);
-        console.log("activeTabs: "+$scope.activeTabs);
         $scope.setWorkflowDetailsError(null);
         if ($scope.refreshingWorkflow) return;
         $scope.refreshingWorkflow = true;
-
         return WorkflowService.refreshWorkflow(workflowId)
           .then(
             function(workflowObj) {
@@ -87,6 +86,7 @@ angular.module('dockstore.ui')
                 activeTabIndex: activeTabIndex ? activeTabIndex : null
               });
               $scope.updateInfoURLs();
+              //$scope.$broadcast('getFile');
               $scope.$broadcast('refreshFiles');
               return workflowObj;
             },
@@ -103,15 +103,43 @@ angular.module('dockstore.ui')
           ).finally(function(response) {
             $scope.refreshingWorkflow = false;
           });
-          
       };
 
       $scope.checkValidation = function(){
-        //check if cwl/wdl file is valid
+        //this function is just a bridge to call the function on 'workflowfileviewer.js' to check content of file
         console.log($scope.workflowObj);
-        $scope.$broadcast('getFile');
+        $scope.missingContent = [];
+        $scope.$broadcast('getFile');   //for now, cause most of the workflows are full mode not stub
         if($scope.workflowObj.mode === 'STUB'){
-          $scope.checkValidation();
+          $scope.$broadcast('getFile');
+        }
+      }
+
+      $scope.checkContentValid = function(){
+        //will print this when the 'Publish' button is clicked
+        var message = 'The file is missing some required fields. Please make sure the file has all the required fields. ';
+        if($scope.validContent){
+          if($scope.missingContent.length !== 0 && $scope.workflowObj.is_published){
+            $scope.missingWarning = true;
+          }
+          return true;
+
+        } else{
+          if($scope.missingContent.length !== 0){
+            $scope.missingWarning = false;
+            if($scope.workflowObj.descriptorType === 'wdl'){
+              $scope.setWorkflowDetailsError(
+                message +
+                'Required fields in WDL file: \'task\', \'workflow\', \'call\', \'command\', and \'output\'',''
+              );
+            }else{
+              $scope.setWorkflowDetailsError(
+                message +
+                'Required fields in CWL file: \'inputs\', \'outputs\', \'baseCommand\', and \'class\'',''
+              );
+            }
+                      }
+          return false;
         }
       }
 

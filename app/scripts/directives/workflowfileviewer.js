@@ -37,7 +37,7 @@ angular.module('dockstore.ui')
           scope.checkDescriptor();
         });
         scope.$on('getFile', function(event) {
-          scope.getFile();
+          scope.getFileContent();
         });
       }
     };

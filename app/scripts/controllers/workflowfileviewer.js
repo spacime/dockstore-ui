@@ -16,52 +16,104 @@ angular.module('dockstore.ui')
   	function ($scope, $q, WorkflowService, NtfnService) {
 
       var descriptors = ["cwl", "wdl"];
+      var inputFound = false;
+      var outputFound = false;
+      var versionFound = false;
+      var commandFound = false;
+      var classFound = false;
+      var taskFound = false;
+      var workflowFound = false;
+      var callFound = false;
 
       $scope.fileLoaded = false;
       $scope.fileContents = null;
       $scope.successContent = [];
 
-      $scope.getFile = function() {
-        console.log("in getFile");
+      $scope.getFileContent = function() {
+        console.log("getFileContent");
         $scope.checkDescriptor();
-        // console.log($scope.selVersionName);
-        // console.log($scope.selDescriptorName);
-       // var try1 = function(){
-          $scope.getDescriptorFile($scope.workflowObj.id, $scope.selVersionName, $scope.selDescriptorName).then(
-          function(result){
-            //should check if descriptor is wdl or cwl later on
-            //for now so it's easier, check as if it's cwl but valid or invalid
-              console.log("descriptor is cwl");
-              var inputFound = false;
-              var outputFound = false;
-              var versionFound = false;
-              var commandFound = false;
-              var classFound = false;
-              if(result.search("inputs:") !== -1){
-                inputFound = true;
-              }
-              if(result.search("outputs:") !== -1){
-                outputFound = true;
-              }
-              if(result.search("cwlVersion:") !== -1){
-                versionFound = true;
-              }
-              if(result.search("baseCommand:") !== -1){
-                commandFound = true;
-              }
-              if(result.search("class:") !== -1){
-                classFound = true;
-              }
-              if(inputFound && outputFound && classFound){
-                console.log("found all");
-                $scope.$emit('refreshWorkflows');
-              } 
-              else{
-                $scope.$emit('refreshError',"TEST ERROR");
-              }
-          },
-          function(e){console.log("error",e)}
-        );
+        $scope.getDescriptorFile($scope.workflowObj.id, $scope.selVersionName, $scope.selDescriptorName).then(
+        function(result){
+          console.log("success result");
+          result = result.toLowerCase();
+          if($scope.selDescriptorName === "cwl"){
+            if(result.search("inputs:") !== -1){
+              inputFound = true;
+            }else{
+              $scope.$emit('returnMissing','inputs');
+            }
+
+            if(result.search("outputs:") !== -1){
+              outputFound = true;
+            }else{
+              $scope.$emit('returnMissing','outputs');
+            }
+
+            if(result.search("cwlversion:") !== -1){
+              versionFound = true;
+            }else{
+              $scope.$emit('returnMissing','cwlVersion');
+            }
+
+            if(result.search("basecommand:") !== -1){
+              commandFound = true;
+            }else{
+              $scope.$emit('returnMissing','baseCommand');
+            }
+
+            if(result.search("class:") !== -1){
+              classFound = true;
+            }else{
+              $scope.$emit('returnMissing','class');
+            }
+
+            //if(inputFound && outputFound && classFound){
+            if(inputFound && outputFound && classFound && commandFound){
+              $scope.$emit('returnValid',true);
+            } else{
+              $scope.$emit('returnValid', false);
+            }
+          } else{
+            //Descriptor: WDL
+            if(result.search('task') !== -1){
+              taskFound = true;
+            }else{
+              $scope.$emit('returnMissing','task');
+            }
+
+            if(result.search('workflow') !== -1){
+              workflowFound = true;
+            }else{
+              $scope.$emit('returnMissing','workflow');
+            }
+
+            if(result.search('call') !== -1){
+              callFound = true;
+            }else{
+              $scope.$emit('returnMissing','call');
+            }
+
+            if(result.search('command') !== -1){
+              commandFound = true;
+            }else{
+              $scope.$emit('returnMissing','command');
+            }
+
+            if(result.search('output') !== -1){
+              outputFound = true;
+            }else{
+              $scope.$emit('returnMissing','output');
+            }
+
+            if(taskFound && workflowFound && taskFound && callFound && outputFound){
+              $scope.$emit('returnValid', true);
+            } else{
+              $scope.$emit('returnValid', false);
+            }
+          }
+        },
+        function(e){console.log("error",e)}
+      );
     };
 
       $scope.checkDescriptor = function() {
@@ -185,8 +237,8 @@ angular.module('dockstore.ui')
         $scope.fileContents = null;
         $scope.expectedFilename = 'Descriptor';
         $scope.getDescriptorFile($scope.workflowObj.id, $scope.selVersionName, $scope.selDescriptorName);
-      };    
-      
+      };
+
       $scope.setDocument();
 
   }]);

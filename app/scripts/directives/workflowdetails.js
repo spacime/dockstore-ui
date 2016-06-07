@@ -25,14 +25,15 @@ angular.module('dockstore.ui')
           scope.refreshWorkflow(workflowId, 2);
         });
         scope.$on('refreshWorkflows', function(event) {
-          console.log("refreshWorkflows function");
-          console.log(scope.activeTabs.indexOf(true));
-          console.log(scope.workflowObj.id);
           scope.refreshWorkflow(scope.workflowObj.id);
         });
-        scope.$on('refreshError', function(event, message){
-          console.log(message);
-          scope.setWorkflowDetailsError(message);
+        scope.$on('returnValid', function(event, valid){
+          scope.validContent = valid;
+          scope.checkContentValid();
+        });
+        scope.$on('returnMissing', function(event,missing){
+          console.log("Missing: "+missing);
+          scope.missingContent.push(missing);
         });
       }
     };
