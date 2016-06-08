@@ -32,7 +32,6 @@ angular.module('dockstore.ui')
           scope.checkContentValid();
         });
         scope.$on('returnMissing', function(event,missing){
-          console.log("Missing: "+missing);
           scope.missingContent.push(missing);
         });
       }
