@@ -24,6 +24,7 @@
       Please wait, retrieving workflow...
     </div>
     <div class="alert alert-warning"
+         ng-class="!editMode ? 'push-top' : ''"
          role="alert"
          ng-if="missingWarning"
          ng-repeat="missing in missingContent"
@@ -36,7 +37,7 @@
       </button>
       <span class="glyphicon glyphicon-warning-sign">
       </span>
-      Fields that are missing from file: {{missing}}
+      Field(s) that are missing from file: {{missing}}
     </div>
   </div>
 </div>

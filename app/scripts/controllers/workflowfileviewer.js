@@ -16,14 +16,6 @@ angular.module('dockstore.ui')
   	function ($scope, $q, WorkflowService, NtfnService) {
 
       var descriptors = ["cwl", "wdl"];
-      var inputFound = false;
-      var outputFound = false;
-      var versionFound = false;
-      var commandFound = false;
-      var classFound = false;
-      var taskFound = false;
-      var workflowFound = false;
-      var callFound = false;
 
       $scope.fileLoaded = false;
       $scope.fileContents = null;
@@ -31,6 +23,14 @@ angular.module('dockstore.ui')
 
       $scope.getFileContent = function() {
         console.log("getFileContent");
+        var inputFound = false;
+        var outputFound = false;
+        var versionFound = false;
+        var commandFound = false;
+        var classFound = false;
+        var taskFound = false;
+        var workflowFound = false;
+        var callFound = false;
         $scope.checkDescriptor();
         $scope.getDescriptorFile($scope.workflowObj.id, $scope.selVersionName, $scope.selDescriptorName).then(
         function(result){
