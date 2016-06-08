@@ -18,7 +18,7 @@ angular.module('dockstore.ui')
 
       $scope.labelsEditMode = false;
       $scope.descriptorEnabled = false;
-      $scope.validContent = false;
+      $scope.validContent = true;
       $scope.missingContent = [];
       $scope.missingWarning = false;
       if (!$scope.activeTabs) {
@@ -113,8 +113,8 @@ angular.module('dockstore.ui')
         if($scope.workflowObj.mode === 'STUB'){
           $scope.$broadcast('getFile');
         }
-      }
-
+      };
+ 
       $scope.checkContentValid = function(){
         //will print this when the 'Publish' button is clicked
         var message = 'The file is missing some required fields. Please make sure the file has all the required fields. ';
@@ -125,23 +125,26 @@ angular.module('dockstore.ui')
           return true;
 
         } else{
-          if($scope.missingContent.length !== 0){
-            $scope.missingWarning = false;
-            if($scope.workflowObj.descriptorType === 'wdl'){
-              $scope.setWorkflowDetailsError(
-                message +
-                'Required fields in WDL file: \'task\', \'workflow\', \'call\', \'command\', and \'output\'',''
-              );
-            }else{
-              $scope.setWorkflowDetailsError(
-                message +
-                'Required fields in CWL file: \'inputs\', \'outputs\', \'baseCommand\', and \'class\'',''
-              );
+            if($scope.missingContent.length !== 0 && $scope.workflowObj.is_published){
+              $scope.missingWarning = false;
+              if(!$scope.refreshingWorkflow){
+                if($scope.workflowObj.descriptorType === 'wdl'){
+                  $scope.setWorkflowDetailsError(
+                    message +
+                    'Required fields in WDL file: \'task\', \'workflow\', \'call\', \'command\', and \'output\'',''
+                  );
+                }else{
+                  $scope.setWorkflowDetailsError(
+                    message +
+                    'Required fields in CWL file: \'inputs\', \'outputs\', \'baseCommand\', and \'class\'',''
+                  );
+                }
+              }
             }
-                      }
+          
           return false;
         }
-      }
+      };
 
       $scope.setWorkflowLabels = function(workflowId, labels) {
         $scope.setWorkflowDetailsError(null);

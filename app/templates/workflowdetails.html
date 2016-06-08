@@ -27,7 +27,6 @@
          ng-class="!editMode ? 'push-top' : ''"
          role="alert"
          ng-if="missingWarning"
-         ng-repeat="missing in missingContent"
          >
       <button type="button"
               class="close"
@@ -37,7 +36,8 @@
       </button>
       <span class="glyphicon glyphicon-warning-sign">
       </span>
-      Field(s) that are missing from file: {{missing}}
+      {{ missingContent.length === 1 ? 'Field that is missing from file: ' : 'Fields that are missing from file: '}}
+      {{missingContent}}
     </div>
   </div>
 </div>
@@ -81,17 +81,17 @@
                   type="button"
                   class="btn btn-primary"
                   ng-class="!refreshingWorkflow && isWorkflowValid()? '' : 'disabled'"
-                  ng-click="setWorkflowRegistration(workflowObj.id, workflowObj.is_published); checkValidation();"
+                  ng-click="setWorkflowRegistration(workflowObj.id, workflowObj.is_published); checkValidation()"
                   ng-model="workflowObj.is_published"
                   ng-class="workflowObj.is_published ? 'btn-primary' : 'btn-warning'"
-                  ng-disabled="refreshingWorkflow || !isWorkflowValid()">
+                  ng-disabled="refreshingWorkflow || !isWorkflowValid() || !validContent">
             {{ workflowObj.is_published ? 'Unpublish' : 'Publish' }}
           </button>
         </div>
 
         <button type="button"
                 class="btn btn-primary"
-                ng-click="refreshWorkflow(workflowObj.id)"
+                ng-click="refreshWorkflow(workflowObj.id); checkValidation()"
                 ng-disabled="refreshingWorkflow">
           Refresh
         </button>
