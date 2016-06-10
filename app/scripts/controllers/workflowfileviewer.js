@@ -99,7 +99,7 @@ angular.module('dockstore.ui')
               $scope.$emit('returnMissing','output');
             }
 
-            if(taskFound && workflowFound && taskFound && callFound && outputFound){
+            if(taskFound && workflowFound && commandFound && callFound && outputFound){
               $scope.$emit('returnValid', true);
             } else{
               $scope.$emit('returnValid', false);
