@@ -74,6 +74,10 @@ angular.module('dockstore.ui')
           });
       };
 
+      // $scope.resetDocument = function(){
+      //   $scope.$broadcast('refreshFiles');
+      // };
+
       $scope.refreshWorkflow = function(workflowId, activeTabIndex) {
         $scope.setWorkflowDetailsError(null);
         if ($scope.refreshingWorkflow) return;
@@ -86,7 +90,6 @@ angular.module('dockstore.ui')
                 activeTabIndex: activeTabIndex ? activeTabIndex : null
               });
               $scope.updateInfoURLs();
-              //$scope.$broadcast('getFile');
               $scope.$broadcast('refreshFiles');
               return workflowObj;
             },
@@ -109,15 +112,13 @@ angular.module('dockstore.ui')
         //this function is just a bridge to call the function on 'workflowfileviewer.js' to check content of file
         console.log($scope.workflowObj);
         $scope.missingContent = [];
-        $scope.$broadcast('getFile');   //for now, cause most of the workflows are full mode not stub
-        if($scope.workflowObj.mode === 'STUB'){
-          $scope.$broadcast('getFile');
-        }
+        $scope.$broadcast('getFile');
       };
- 
+
       $scope.checkContentValid = function(){
         //will print this when the 'Publish' button is clicked
         var message = 'The file is missing some required fields. Please make sure the file has all the required fields. ';
+        var missingMessage = 'The missing field(s):'
         if($scope.validContent){
           if($scope.missingContent.length !== 0 && $scope.workflowObj.is_published){
             $scope.missingWarning = true;
@@ -127,21 +128,27 @@ angular.module('dockstore.ui')
         } else{
             if($scope.missingContent.length !== 0 && $scope.workflowObj.is_published){
               $scope.missingWarning = false;
+              for(var i=0;i<$scope.missingContent.length;i++){
+                missingMessage += ' \''+$scope.missingContent[i]+'\'';
+                if(i!=$scope.missingContent.length -1){
+                  missingMessage+=',';
+                }
+              }
               if(!$scope.refreshingWorkflow){
                 if($scope.workflowObj.descriptorType === 'wdl'){
                   $scope.setWorkflowDetailsError(
-                    message +
-                    'Required fields in WDL file: \'task\', \'workflow\', \'call\', \'command\', and \'output\'',''
+                    message+missingMessage +
+                    '. Required fields in WDL file: \'task\', \'workflow\', \'call\', \'command\', and \'output\'',''
                   );
                 }else{
                   $scope.setWorkflowDetailsError(
-                    message +
-                    'Required fields in CWL file: \'inputs\', \'outputs\', \'baseCommand\', and \'class\'',''
+                    message+missingMessage +
+                    '. Required fields in CWL file: \'inputs\', \'outputs\', \'class\', and \'steps\'',''
                   );
                 }
               }
             }
-          
+
           return false;
         }
       };
