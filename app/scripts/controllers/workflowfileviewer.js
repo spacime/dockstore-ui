@@ -25,8 +25,7 @@ angular.module('dockstore.ui')
         console.log("getFileContent");
         var inputFound = false;
         var outputFound = false;
-        var versionFound = false;
-        var commandFound = false;
+        var stepsFound = false;
         var classFound = false;
         var taskFound = false;
         var workflowFound = false;
@@ -37,6 +36,7 @@ angular.module('dockstore.ui')
           console.log("success result");
           result = result.toLowerCase();
           if($scope.selDescriptorName === "cwl"){
+            //Descriptor: CWL
             if(result.search("inputs:") !== -1){
               inputFound = true;
             }else{
@@ -49,16 +49,10 @@ angular.module('dockstore.ui')
               $scope.$emit('returnMissing','outputs');
             }
 
-            if(result.search("cwlversion:") !== -1){
-              versionFound = true;
+            if(result.search("steps:") !== -1){
+              stepsFound = true;
             }else{
-              $scope.$emit('returnMissing','cwlVersion');
-            }
-
-            if(result.search("basecommand:") !== -1){
-              commandFound = true;
-            }else{
-              $scope.$emit('returnMissing','baseCommand');
+              $scope.$emit('returnMissing','steps');
             }
 
             if(result.search("class:") !== -1){
@@ -67,8 +61,7 @@ angular.module('dockstore.ui')
               $scope.$emit('returnMissing','class');
             }
 
-            //if(inputFound && outputFound && classFound){
-            if(inputFound && outputFound && classFound && commandFound){
+            if(inputFound && outputFound && classFound && stepsFound){
               $scope.$emit('returnValid',true);
             } else{
               $scope.$emit('returnValid', false);
