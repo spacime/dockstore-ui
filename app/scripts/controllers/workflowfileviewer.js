@@ -29,6 +29,7 @@ angular.module('dockstore.ui')
         var classFound = false;
         var taskFound = false;
         var workflowFound = false;
+        var commandFound = false;
         var callFound = false;
         $scope.checkDescriptor();
         $scope.getDescriptorFile($scope.workflowObj.id, $scope.selVersionName, $scope.selDescriptorName).then(
