@@ -19,7 +19,7 @@ angular.module('dockstore.ui')
     API_URI_DEBUG: 'http://localhost:9000/tests/dummy-data',
 
     GITHUB_AUTH_URL: 'https://github.com/login/oauth/authorize',
-    GITHUB_CLIENT_ID: 'a70739297a7d67f915de',
+    GITHUB_CLIENT_ID: '2e427151f8a0b3ff2b62',
     GITHUB_REDIRECT_URI: 'http://localhost:9000/login',
     GITHUB_SCOPE: 'read:org',
 
