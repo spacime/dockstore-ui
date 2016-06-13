@@ -31,10 +31,9 @@ angular.module('dockstore.ui')
         var workflowFound = false;
         var commandFound = false;
         var callFound = false;
-        $scope.checkDescriptor();
+
         $scope.getDescriptorFile($scope.workflowObj.id, $scope.selVersionName, $scope.selDescriptorName).then(
         function(result){
-          console.log("success result");
           result = result.toLowerCase();
           if($scope.selDescriptorName === "cwl"){
             //Descriptor: CWL

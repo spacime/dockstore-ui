@@ -83,8 +83,8 @@
                   ng-class="!refreshingWorkflow && isWorkflowValid()? '' : 'disabled'"
                   ng-click="setWorkflowRegistration(workflowObj.id, workflowObj.is_published); checkValidation()"
                   ng-model="workflowObj.is_published"
-                  ng-class="workflowObj.is_published ? 'btn-primary' : 'btn-warning'"
-                  ng-disabled="refreshingWorkflow || !isWorkflowValid() || !validContent">
+                  ng-class="workflowObj.is_published? 'btn-primary' : 'btn-warning'"
+                  ng-disabled="refreshingWorkflow || !isWorkflowValid() || workflowObj.mode === 'STUB' || !validContent">
             {{ workflowObj.is_published ? 'Unpublish' : 'Publish' }}
           </button>
         </div>
