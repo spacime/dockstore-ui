@@ -27,6 +27,19 @@ angular.module('dockstore.ui')
       });
     };
 
+    this.getCrossSitePublishedContainerList = function() {
+      return $q(function(resolve, reject) {
+        $http({
+          method: 'GET',
+          url: 'https://www.dockstore.org:8443' + '/containers/published'
+        }).then(function(response) {
+          resolve(response.data);
+        }, function(response) {
+          reject(response);
+        });
+      });
+    };
+
     this.getPublishedContainerById = function(containerId) {
       return $q(function(resolve, reject) {
         $http({

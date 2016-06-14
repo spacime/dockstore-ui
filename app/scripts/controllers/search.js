@@ -30,6 +30,23 @@ angular.module('dockstore.ui')
           .then(
             function(containers) {
               $scope.containers = containers;
+              console.log($scope.containers);
+            },
+            function(response) {
+              var message = '[HTTP ' + response.status + '] ' +
+                  response.statusText + ': ' + response.data;
+              NtfnService.popError('List Published Containers', message);
+              return $q.reject(response);
+            }
+          );
+      };
+
+      $scope.listCrossSitePublishedContainers = function() {
+        return ContainerService.getCrossSitePublishedContainerList()
+          .then(
+            function(containers) {
+              console.log(containers);
+              $scope.containers = $.merge($scope.containers, containers);
             },
             function(response) {
               var message = '[HTTP ' + response.status + '] ' +
@@ -77,6 +94,7 @@ angular.module('dockstore.ui')
             });
 
       $scope.listPublishedContainers();
+      $scope.listCrossSitePublishedContainers();
 
       $("#toolSearch").focus();
 
