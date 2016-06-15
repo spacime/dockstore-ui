@@ -16,6 +16,7 @@
 angular.module('dockstore.ui')
   .constant('WebService', {
     API_URI: 'http://localhost:8080',
+    // API_URI: 'https://www.dockstore.org:8443',
     API_URI_DEBUG: 'http://localhost:9000/tests/dummy-data',
 
     GITHUB_AUTH_URL: 'https://github.com/login/oauth/authorize',
