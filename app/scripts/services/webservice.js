@@ -33,5 +33,5 @@ angular.module('dockstore.ui')
     BITBUCKET_CLIENT_ID: 'K9VxydpaXKCgxxVpbx',
 
     DSCLI_RELEASE_URL: 'https://github.com/ga4gh/dockstore/' +
-                        'releases/download/0.3-alpha.0/dockstore'
+      'releases/download/0.3-alpha.0/dockstore'
   });

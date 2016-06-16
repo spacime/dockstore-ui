@@ -20,8 +20,8 @@ angular.module('dockstore.ui')
     'UserService',
     'TokenService',
     'NotificationService',
-    function ($scope, $rootScope, $q, $window, $location, $auth, $routeParams,
-        ContainerService, UserService, TokenService, NtfnService) {
+    function($scope, $rootScope, $q, $window, $location, $auth, $routeParams,
+      ContainerService, UserService, TokenService, NtfnService) {
 
       $scope.userObj = UserService.getUserObj();
 
@@ -30,11 +30,12 @@ angular.module('dockstore.ui')
           .then(
             function(containers) {
               $scope.containers = containers;
-              console.log($scope.containers);
+
+              // console.log($scope.containers);
             },
             function(response) {
               var message = '[HTTP ' + response.status + '] ' +
-                  response.statusText + ': ' + response.data;
+                response.statusText + ': ' + response.data;
               NtfnService.popError('List Published Containers', message);
               return $q.reject(response);
             }
@@ -45,12 +46,15 @@ angular.module('dockstore.ui')
         return ContainerService.getCrossSitePublishedContainerList()
           .then(
             function(containers) {
-              console.log(containers);
+              for(var i = 0; i < containers.length; i++) {
+                containers[i]["isRemoteTool"] = true;
+              }
+              console.log(containers[0].isRemoteTool);
               $scope.containers = $.merge($scope.containers, containers);
             },
             function(response) {
               var message = '[HTTP ' + response.status + '] ' +
-                  response.statusText + ': ' + response.data;
+                response.statusText + ': ' + response.data;
               NtfnService.popError('List Published Containers', message);
               return $q.reject(response);
             }
@@ -74,28 +78,29 @@ angular.module('dockstore.ui')
       }
 
       $scope.$watch('searchQueryContainer', function(newValue, oldValue) {
-              $rootScope.searchQueryContainer = newValue;
-            });
+        $rootScope.searchQueryContainer = newValue;
+      });
 
-            $scope.$watch('searchQueryWorkflow', function(newValue, oldValue) {
-              $rootScope.searchQueryWorkflow = newValue;
-            });
+      $scope.$watch('searchQueryWorkflow', function(newValue, oldValue) {
+        $rootScope.searchQueryWorkflow = newValue;
+      });
 
-            $scope.$on('$routeChangeStart', function(event, next, current) {
-              if ($location.url().indexOf('/search-containers') === -1) {
-                $scope.searchQueryContainer = '';
-              }
-            });
+      $scope.$on('$routeChangeStart', function(event, next, current) {
+        if ($location.url().indexOf('/search-containers') === -1) {
+          $scope.searchQueryContainer = '';
+        }
+      });
 
-            $scope.$on('$routeChangeStart', function(event, next, current) {
-              if ($location.url().indexOf('/search-workflows') === -1) {
-                $scope.searchQueryWorkflow = '';
-              }
-            });
+      $scope.$on('$routeChangeStart', function(event, next, current) {
+        if ($location.url().indexOf('/search-workflows') === -1) {
+          $scope.searchQueryWorkflow = '';
+        }
+      });
 
       $scope.listPublishedContainers();
       $scope.listCrossSitePublishedContainers();
 
       $("#toolSearch").focus();
 
-  }]);
+    }
+  ]);
