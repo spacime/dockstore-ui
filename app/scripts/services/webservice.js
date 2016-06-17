@@ -25,7 +25,7 @@ angular.module('dockstore.ui')
     GITHUB_SCOPE: 'read:org',
 
     QUAYIO_AUTH_URL: 'https://quay.io/oauth/authorize',
-    QUAYIO_CLIENT_ID: 'RWCBI3Y6QUNXDPYKNLMC',
+    QUAYIO_CLIENT_ID: '1KPJGHD0555PSR9L3OZV',
     QUAYIO_REDIRECT_URI: 'http://localhost:9000/auth/quay.io',
     QUAYIO_SCOPE: 'repo:read,user:read',
 

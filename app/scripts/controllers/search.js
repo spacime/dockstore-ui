@@ -51,6 +51,7 @@ angular.module('dockstore.ui')
               }
               console.log(containers[0].isRemoteTool);
               $scope.containers = $.merge($scope.containers, containers);
+              $scope.containers = $scope.containers.slice(0, 15);
             },
             function(response) {
               var message = '[HTTP ' + response.status + '] ' +
