@@ -29,9 +29,10 @@ angular.module('dockstore.ui')
         return ContainerService.getPublishedContainerList()
           .then(
             function(containers) {
+              for(var i = 0; i < containers.length; i++) {
+                containers[i]["isRemoteTool"] = false;
+              }
               $scope.containers = containers;
-
-              // console.log($scope.containers);
             },
             function(response) {
               var message = '[HTTP ' + response.status + '] ' +
@@ -49,9 +50,9 @@ angular.module('dockstore.ui')
               for(var i = 0; i < containers.length; i++) {
                 containers[i]["isRemoteTool"] = true;
               }
-              console.log(containers[0].isRemoteTool);
+              // console.log(containers[0].isRemoteTool);
               $scope.containers = $.merge($scope.containers, containers);
-              $scope.containers = $scope.containers.slice(0, 15);
+              $scope.containers = $scope.containers.slice(0, 12);
             },
             function(response) {
               var message = '[HTTP ' + response.status + '] ' +
