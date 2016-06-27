@@ -51,6 +51,7 @@ angular.module('dockstore.ui')
                 containers[i]["isRemoteTool"] = true;
               }
               // console.log(containers[0].isRemoteTool);
+              console.log(containers);
               $scope.containers = $.merge($scope.containers, containers);
               $scope.containers = $scope.containers.slice(0, 12);
             },
