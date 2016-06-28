@@ -31,7 +31,7 @@ angular.module('dockstore.ui')
       return $q(function(resolve, reject) {
         $http({
           method: 'GET',
-          url: 'http://127.0.0.1:5000/test'
+          url: 'http://0.0.0.0:32779/'
           // url: 'https://www.dockstore.org:8443' + '/containers/published'
         }).then(function(response) {
           resolve(response.data);
